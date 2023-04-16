@@ -25,6 +25,4 @@ tensorly==0.4.5
 thop==0.0.31.post2005241907
 threadpoolctl==2.1.0
 tifffile==2020.9.3
-torch==1.6.0
-torchvision==0.7.0
 tqdm==4.49.0

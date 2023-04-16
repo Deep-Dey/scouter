@@ -1,0 +1,32 @@
+STEP 1: 
+Download source code from github
+link: https://github.com/wbw520/scouter
+
+STEP 2:
+Intstall python3 in your system
+version (3.8.6 recommended)
+
+STEP 3:
+Create a virtual environment
+Run: python -m venv venv
+
+STEP 4:
+Activate your virtual environment:
+On Windows, run: venv\Scripts\activate.bat
+On Unix or MacOS, run: source venv/bin/activate
+
+STEP 5:
+Install requirements (download the attached requirements.txt)
+Run: pip install -r requirements.txt
+
+STEP 5.1:
+Install pytorch separately
+pip install torch==1.6.0+cpu torchvision==0.7.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+pip install torch==1.6.0+cu101 torchvision==0.7.0+cu101 -f https://download.pytorch.org/whl/torch_stable.html
+
+STEP 6:
+Run training:
+python train.py --dataset MNIST --model resnet18 --batch_size 64 --epochs 10 --num_classes 10 --use_slot false --vis false --aug false
+
+Run testing: 
+python test.py --dataset MNIST --model resnet18 --batch_size 64 --epochs 10 --num_classes 10 --use_slot false --use_pre true --loss_status 1 --slots_per_class 1 --power 1 --to_k_layer 1 --lambda_value 1. --vis true --channel 512 --aug false --device cpu
