@@ -26,9 +26,7 @@ def select_dataset(args):
         return dataset_train, dataset_val
     
     if args.dataset == "MINET":
-        train, val = Minet(args).get_data()
-        dataset_train = ConText(train, transform=make_transform(args, "train"))
-        dataset_val = ConText(val, transform=make_transform(args, "val"))
+        dataset_train, dataset_val = Minet(args).get_data()
         return dataset_train, dataset_val
 
     raise ValueError(f'unknown {args.dataset}')

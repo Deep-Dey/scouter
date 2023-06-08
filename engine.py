@@ -22,8 +22,12 @@ def calculation(model, mode, data_loader, device, record, epoch, optimizer=None)
     running_log_loss = 0.0
     print("start " + mode + " :" + str(epoch))
     for i_batch, sample_batch in enumerate(tqdm(data_loader)):
-        inputs = sample_batch["image"].to(device, dtype=torch.float32)
-        labels = sample_batch["label"].to(device, dtype=torch.int64)
+        try:
+            inputs = sample_batch["image"].to(device, dtype=torch.float32)
+            labels = sample_batch["label"].to(device, dtype=torch.int64)
+        except:
+            inputs = sample_batch[0].to(device, dtype=torch.float32)
+            labels = sample_batch[1].to(device, dtype=torch.int64)
 
         if mode == "train":
             optimizer.zero_grad()
