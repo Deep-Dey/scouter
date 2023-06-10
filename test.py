@@ -130,7 +130,7 @@ def main():
         image = data[0][0]
         label = data[1][0].item()
         image_orl = Image.fromarray((image.cpu().detach().numpy()*255).astype(np.uint8).transpose((1,2,0)), mode='RGB')
-        image = transform(image_orl)
+        # image = transform(image_orl)
         # transform = transforms.Compose([transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
     print("label\t", label)

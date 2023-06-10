@@ -23,9 +23,7 @@ def test(args, model, device, img, image, label, vis_id):
     image = image.to(device, dtype=torch.float32)
     output = model(torch.unsqueeze(image, dim=0))
     pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
-    print(output[0])
-    print(pred[0])
-    return label == pred[0].item()
+    return pred[0].item()
 
     #For vis
     # image_raw = img
@@ -122,24 +120,26 @@ def main():
 
         dataset = torchvision.datasets.ImageFolder(args.dataset_dir, transform=transformation)
 
-        train_set_size = int(len(dataset) * 0.8)
-        test_set_size = len(dataset) - train_set_size
-        train_set, data_loader_val = random_split(dataset, [train_set_size, test_set_size])
+        test_set_size = len(dataset)
         
-        data_loader_val = torch.utils.data.DataLoader(data_loader_val, args.batch_size, shuffle=False, num_workers=1, pin_memory=True)
+        data_loader_val = torch.utils.data.DataLoader(dataset, args.batch_size, shuffle=True, num_workers=1, pin_memory=True)
         # data = iter(data_loader_val).next()
-        totalAccuracy = 0
         model = SlotModel(args)
         checkpoint = torch.load(f"{args.output_dir}/" + model_name, map_location=args.device)
         model.load_state_dict(checkpoint["model"])
+        confusion_matrix = torch.zeros(args.num_classes, args.num_classes)
         for i, (images, labels) in enumerate(data_loader_val):
             for image, label in zip(images, labels):
                 label = label.item()
                 image_orl = Image.fromarray((image.cpu().detach().numpy()*255).astype(np.uint8).transpose((1,2,0)), mode='RGB')
-                image = transform(image_orl)
-                totalAccuracy+= 1 if test(args, model, device, image_orl, image, label, vis_id=args.vis_id) else 0
+                # image = transform(image_orl)
+                outcome= test(args, model, device, image_orl, image, label, vis_id=args.vis_id)
+                confusion_matrix[label, outcome] += 1
         # transform = transforms.Compose([transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
-        accuracy = totalAccuracy / test_set_size
+        # save confusion matrix
+        torch.save(confusion_matrix, f"{args.output_dir}/" + model_name + "_confusion_matrix")
+        print('finished...')
+        exit()
 
     print("label\t", label)
     model = SlotModel(args)
