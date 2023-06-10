@@ -58,7 +58,7 @@ class SlotModel(nn.Module):
         self.use_slot = args.use_slot
         self.backbone = load_backbone(args)
         if self.use_slot:
-            if 'densenet' in args.model:
+            if args.model in ['densenet', 'resnet18']:
                 self.feature_size = 8
             else:
                 self.feature_size = 9

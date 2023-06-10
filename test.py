@@ -27,23 +27,23 @@ def test(args, model, device, img, image, label, vis_id):
     print(pred[0])
 
     #For vis
-    # image_raw = img
-    # image_raw.save('sloter/vis/image.png')
-    # print(torch.argmax(output[vis_id]).item())
-    # model.train()
+    image_raw = img
+    image_raw.save('sloter/vis/image.png')
+    print(torch.argmax(output[vis_id]).item())
+    model.train()
 
-    # for id in range(args.num_classes):
-    #     image_raw = Image.open('sloter/vis/image.png').convert('RGB')
-    #     slot_image = np.array(Image.open(f'sloter/vis/slot_{id}.png').resize(image_raw.size, resample=Image.BILINEAR), dtype=np.uint8)  
+    for id in range(args.num_classes):
+        image_raw = Image.open('sloter/vis/image.png').convert('RGB')
+        slot_image = np.array(Image.open(f'sloter/vis/slot_{id}.png').resize(image_raw.size, resample=Image.BILINEAR), dtype=np.uint8)  
 
-    #     heatmap_only, heatmap_on_image = apply_colormap_on_image(image_raw, slot_image, 'jet')
-    #     heatmap_on_image.save(f'sloter/vis/slot_mask_{id}.png')
+        heatmap_only, heatmap_on_image = apply_colormap_on_image(image_raw, slot_image, 'jet')
+        heatmap_on_image.save(f'sloter/vis/slot_mask_{id}.png')
 
-    # if args.cal_area_size:
-    #     slot_image = np.array(Image.open(f'sloter/vis/slot_{str(label) if args.loss_status>0 else str(label+1)}.png'), dtype=np.uint8)
-    #     slot_image_size = slot_image.shape
-    #     attention_ratio = float(slot_image.sum()) / float(slot_image_size[0]*slot_image_size[1]*255)
-    #     print(f"attention_ratio: {attention_ratio}")
+    if args.cal_area_size:
+        slot_image = np.array(Image.open(f'sloter/vis/slot_{str(label) if args.loss_status>0 else str(label+1)}.png'), dtype=np.uint8)
+        slot_image_size = slot_image.shape
+        attention_ratio = float(slot_image.sum()) / float(slot_image_size[0]*slot_image_size[1]*255)
+        print(f"attention_ratio: {attention_ratio}")
 
 
 def main():
